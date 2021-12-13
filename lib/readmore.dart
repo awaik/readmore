@@ -194,7 +194,6 @@ class ReadMoreTextState extends State<ReadMoreText> {
               textSpan = TextSpan(
                 style: effectiveTextStyle,
                 text: widget.data,
-                recognizer: TapGestureRecognizer()..onTap = _onTapLink,
               );
             }
             break;

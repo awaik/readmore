@@ -131,6 +131,7 @@ class ReadMoreTextState extends State<ReadMoreText> {
         final text = TextSpan(
           style: effectiveTextStyle,
           text: widget.data,
+          recognizer: TapGestureRecognizer()..onTap = _onTapLink,
         );
 
         // Layout and measure link
@@ -187,11 +188,13 @@ class ReadMoreTextState extends State<ReadMoreText> {
                     ? widget.data.substring(0, widget.trimLength)
                     : widget.data,
                 children: <TextSpan>[_delimiter, link],
+                recognizer: TapGestureRecognizer()..onTap = _onTapLink,
               );
             } else {
               textSpan = TextSpan(
                 style: effectiveTextStyle,
                 text: widget.data,
+                recognizer: TapGestureRecognizer()..onTap = _onTapLink,
               );
             }
             break;
@@ -204,11 +207,13 @@ class ReadMoreTextState extends State<ReadMoreText> {
                         (linkLongerThanLine ? _kLineSeparator : '')
                     : widget.data,
                 children: <TextSpan>[_delimiter, link],
+                recognizer: TapGestureRecognizer()..onTap = _onTapLink,
               );
             } else {
               textSpan = TextSpan(
                 style: effectiveTextStyle,
                 text: widget.data,
+                recognizer: TapGestureRecognizer()..onTap = _onTapLink,
               );
             }
             break;
@@ -223,7 +228,7 @@ class ReadMoreTextState extends State<ReadMoreText> {
           softWrap: true,
           //softWrap,
           overflow: TextOverflow.clip,
-          //overflow,
+          //overflow,п
           textScaleFactor: textScaleFactor,
           text: textSpan,
         );

@@ -194,16 +194,6 @@ class ReadMoreTextState extends State<ReadMoreText> {
           linkLongerThanLine = true;
         }
 
-        if (textPainter.didExceedMaxLines) {
-          widget.readMoreTextDataCallback?.call(
-            ReadMoreTextData(
-                lengthBeforeCut: endIndex,
-                lineHeight: textPainter.height / widget.trimLines,
-                linesTotal: widget.data.length ~/ ((endIndex + _kLineSeparator.length) / widget.trimLines)),
-          );
-          print('++++++++++++++++++++++++++++++9999991');
-        }
-
         var textSpan;
         switch (widget.trimMode) {
           case TrimMode.Length:
@@ -225,12 +215,12 @@ class ReadMoreTextState extends State<ReadMoreText> {
             break;
           case TrimMode.Line:
             if (textPainter.didExceedMaxLines) {
-              // widget.readMoreTextDataCallback?.call(
-              //   ReadMoreTextData(
-              //       lengthBeforeCut: endIndex,
-              //       lineHeight: textPainter.height / widget.trimLines,
-              //       linesTotal: widget.data.length ~/ ((endIndex + _kLineSeparator.length) / widget.trimLines)),
-              // );
+              widget.readMoreTextDataCallback?.call(
+                ReadMoreTextData(
+                    lengthBeforeCut: endIndex,
+                    lineHeight: textPainter.height / widget.trimLines,
+                    linesTotal: widget.data.length ~/ ((endIndex + _kLineSeparator.length) / widget.trimLines)),
+              );
               textSpan = TextSpan(
                 style: effectiveTextStyle,
                 text: _readMore

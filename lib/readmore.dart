@@ -29,7 +29,9 @@ class ReadMoreText extends StatefulWidget {
     this.delimiter = _kEllipsis + ' ',
     this.delimiterStyle,
     this.callback,
-    required this.lengthBeforeCut,
+    this.lengthBeforeCutCallback,
+    this.lineHeightCallback,
+    this.linesTotalCallback,
   }) : super(key: key);
 
   /// Used on TrimMode.Length
@@ -52,8 +54,14 @@ class ReadMoreText extends StatefulWidget {
   ///Called when state change between expanded/compress
   final Function(bool val)? callback;
 
-  ///Called when state change between expanded/compress
-  final Function(int val) lengthBeforeCut;
+  ///Called when state change to expanded in the lines mode
+  final Function(int val)? lengthBeforeCutCallback;
+
+  ///Called when state change to expanded in the lines mode
+  final Function(int val)? linesTotalCallback;
+
+  ///Called when state change to expanded in the lines mode
+  final Function(double val)? lineHeightCallback;
 
   final String delimiter;
   final String data;
@@ -203,12 +211,14 @@ class ReadMoreTextState extends State<ReadMoreText> {
             break;
           case TrimMode.Line:
             if (textPainter.didExceedMaxLines) {
-              widget.lengthBeforeCut.call(endIndex);
+              widget.lengthBeforeCutCallback?.call(endIndex);
+              widget.linesTotalCallback
+                  ?.call(widget.data.length ~/ ((endIndex + _kLineSeparator.length) / widget.trimLines) + 1);
+              widget.lineHeightCallback?.call(textPainter.height / widget.trimLines);
               textSpan = TextSpan(
                 style: effectiveTextStyle,
                 text: _readMore
-                    ? widget.data.substring(0, endIndex -1) +
-                        (linkLongerThanLine ? _kLineSeparator : '')
+                    ? widget.data.substring(0, endIndex - 1) + (linkLongerThanLine ? _kLineSeparator : '')
                     : widget.data,
                 children: <TextSpan>[_delimiter, link],
                 recognizer: TapGestureRecognizer()..onTap = _onTapLink,

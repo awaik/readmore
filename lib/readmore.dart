@@ -29,6 +29,7 @@ class ReadMoreText extends StatefulWidget {
     this.delimiter = _kEllipsis + ' ',
     this.delimiterStyle,
     this.callback,
+    required this.lengthBeforeCut,
   }) : super(key: key);
 
   /// Used on TrimMode.Length
@@ -50,6 +51,9 @@ class ReadMoreText extends StatefulWidget {
 
   ///Called when state change between expanded/compress
   final Function(bool val)? callback;
+
+  ///Called when state change between expanded/compress
+  final Function(int val) lengthBeforeCut;
 
   final String delimiter;
   final String data;
@@ -199,6 +203,7 @@ class ReadMoreTextState extends State<ReadMoreText> {
             break;
           case TrimMode.Line:
             if (textPainter.didExceedMaxLines) {
+              widget.lengthBeforeCut.call(endIndex);
               textSpan = TextSpan(
                 style: effectiveTextStyle,
                 text: _readMore

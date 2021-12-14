@@ -8,6 +8,18 @@ enum TrimMode {
   Line,
 }
 
+class ReadMoreTextData {
+  ReadMoreTextData({
+    this.lengthBeforeCut = 0,
+    this.lineHeight = 0,
+    this.linesTotal = 0,
+  });
+
+  final int lengthBeforeCut;
+  final double lineHeight;
+  final int linesTotal;
+}
+
 class ReadMoreText extends StatefulWidget {
   const ReadMoreText(
     this.data, {
@@ -29,9 +41,7 @@ class ReadMoreText extends StatefulWidget {
     this.delimiter = _kEllipsis + ' ',
     this.delimiterStyle,
     this.callback,
-    this.lengthBeforeCutCallback,
-    this.lineHeightCallback,
-    this.linesTotalCallback,
+    this.readMoreTextDataCallback,
   }) : super(key: key);
 
   /// Used on TrimMode.Length
@@ -55,13 +65,7 @@ class ReadMoreText extends StatefulWidget {
   final Function(bool val)? callback;
 
   ///Called when state change to expanded in the lines mode
-  final Function(int val)? lengthBeforeCutCallback;
-
-  ///Called when state change to expanded in the lines mode
-  final Function(int val)? linesTotalCallback;
-
-  ///Called when state change to expanded in the lines mode
-  final Function(double val)? lineHeightCallback;
+  final Function(ReadMoreTextData val)? readMoreTextDataCallback;
 
   final String delimiter;
   final String data;
@@ -211,10 +215,12 @@ class ReadMoreTextState extends State<ReadMoreText> {
             break;
           case TrimMode.Line:
             if (textPainter.didExceedMaxLines) {
-              widget.lengthBeforeCutCallback?.call(endIndex);
-              widget.linesTotalCallback
-                  ?.call(widget.data.length ~/ ((endIndex + _kLineSeparator.length) / widget.trimLines) + 1);
-              widget.lineHeightCallback?.call(textPainter.height / widget.trimLines);
+              widget.readMoreTextDataCallback?.call(
+                ReadMoreTextData(
+                    lengthBeforeCut: endIndex,
+                    lineHeight: textPainter.height / widget.trimLines,
+                    linesTotal: widget.data.length ~/ ((endIndex + _kLineSeparator.length) / widget.trimLines)),
+              );
               textSpan = TextSpan(
                 style: effectiveTextStyle,
                 text: _readMore

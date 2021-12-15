@@ -90,6 +90,7 @@ const String _kLineSeparator = '\u2028';
 
 class ReadMoreTextState extends State<ReadMoreText> {
   bool _readMore = true;
+  double _textHeight = 0;
 
   void _onTapLink() {
     setState(() {
@@ -214,12 +215,14 @@ class ReadMoreTextState extends State<ReadMoreText> {
             }
             break;
           case TrimMode.Line:
-            if (textPainter.didExceedMaxLines) {
+            if (textPainter.didExceedMaxLines && _textHeight != textPainter.height) {
+              _textHeight = textPainter.height;
               widget.readMoreTextDataCallback?.call(
                 ReadMoreTextData(
-                    lengthBeforeCut: endIndex,
-                    lineHeight: textPainter.height / widget.trimLines,
-                    linesTotal: widget.data.length ~/ ((endIndex + _kLineSeparator.length) / widget.trimLines)),
+                  lengthBeforeCut: endIndex,
+                  lineHeight: textPainter.height / widget.trimLines,
+                  linesTotal: widget.data.length ~/ ((endIndex + _kLineSeparator.length) / widget.trimLines),
+                ),
               );
               textSpan = TextSpan(
                 style: effectiveTextStyle,

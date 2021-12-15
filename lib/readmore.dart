@@ -215,15 +215,17 @@ class ReadMoreTextState extends State<ReadMoreText> {
             }
             break;
           case TrimMode.Line:
-            if (textPainter.didExceedMaxLines && _textHeight != textPainter.height) {
-              _textHeight = textPainter.height;
-              widget.readMoreTextDataCallback?.call(
-                ReadMoreTextData(
-                  lengthBeforeCut: endIndex,
-                  lineHeight: textPainter.height / widget.trimLines,
-                  linesTotal: widget.data.length ~/ ((endIndex + _kLineSeparator.length) / widget.trimLines),
-                ),
-              );
+            if (textPainter.didExceedMaxLines) {
+              if (_textHeight != textPainter.height) {
+                _textHeight = textPainter.height;
+                widget.readMoreTextDataCallback?.call(
+                  ReadMoreTextData(
+                    lengthBeforeCut: endIndex,
+                    lineHeight: textPainter.height / widget.trimLines,
+                    linesTotal: widget.data.length ~/ ((endIndex + _kLineSeparator.length) / widget.trimLines),
+                  ),
+                );
+              }
               textSpan = TextSpan(
                 style: effectiveTextStyle,
                 text: _readMore

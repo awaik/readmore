@@ -202,7 +202,7 @@ class ReadMoreTextState extends State<ReadMoreText> {
               textSpan = TextSpan(
                 style: effectiveTextStyle,
                 text: _readMore
-                    ? widget.data.substring(0, widget.trimLength)
+                    ? widget.data.substring(0, widget.trimLength).trim()
                     : widget.data,
                 children: <TextSpan>[_delimiter, link],
                 recognizer: TapGestureRecognizer()..onTap = _onTapLink,
@@ -229,7 +229,7 @@ class ReadMoreTextState extends State<ReadMoreText> {
               textSpan = TextSpan(
                 style: effectiveTextStyle,
                 text: _readMore
-                    ? widget.data.substring(0, endIndex - 1) + (linkLongerThanLine ? _kLineSeparator : '')
+                    ? widget.data.substring(0, endIndex).trim() + (linkLongerThanLine ? _kLineSeparator : '')
                     : widget.data,
                 children: <TextSpan>[_delimiter, link],
                 recognizer: TapGestureRecognizer()..onTap = _onTapLink,
